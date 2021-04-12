@@ -3,6 +3,7 @@
 const Dotenv = require('dotenv');
 const Confidence = require('@hapipal/confidence');
 const Toys = require('@hapipal/toys');
+const Schwifty = require('@hapipal/schwifty');
 
 // Pull .env into process.env
 Dotenv.config({ path: `${__dirname}/.env` });
@@ -12,15 +13,15 @@ module.exports = new Confidence.Store({
     server: {
         host: 'localhost',
         port: {
-            $param: 'PORT',
+            $env: 'PORT',
             $coerce: 'number',
             $default: 3000
         },
         debug: {
-            $filter: 'NODE_ENV',
+            $filter: { $env: 'NODE_ENV' },
             $default: {
                 log: ['error', 'start'],
-                request: ['error']
+                request: ['error'],
             },
             production: {
                 request: ['implementation']
@@ -37,8 +38,31 @@ module.exports = new Confidence.Store({
                 plugin: './plugins/swagger'
             },
             {
+                plugin  : '@hapipal/schwifty',
+                options : {
+                    $filter    : 'NODE_ENV',
+                    $default   : {},
+                    $base      : {
+                        migrateOnStart : true,
+                        knex           : {
+                            client     : 'mysql',
+                            connection : {
+                                host     : '127.0.0.1',
+                                port     : 3306,
+                                user     : 'root',
+                                password : 'hapi',
+                                database : 'user'
+                            }
+                        }
+                },
+                production : {
+                        migrateOnStart : false
+                    }
+                }
+            },
+            {
                 plugin: {
-                    $filter: 'NODE_ENV',
+                    $filter: { $env: 'NODE_ENV' },
                     $default: '@hapipal/hpal-debug',
                     production: Toys.noop
                 }
