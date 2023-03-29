@@ -21,7 +21,7 @@ module.exports = new Confidence.Store({
             $filter: { $env: 'NODE_ENV' },
             $default: {
                 log: ['error', 'start'],
-                request: ['error'],
+                request: ['error']
             },
             production: {
                 request: ['implementation']
@@ -38,25 +38,25 @@ module.exports = new Confidence.Store({
                 plugin: './plugins/swagger'
             },
             {
-                plugin  : '@hapipal/schwifty',
-                options : {
-                    $filter    : 'NODE_ENV',
-                    $default   : {},
-                    $base      : {
-                        migrateOnStart : true,
-                        knex           : {
-                            client     : 'mysql',
-                            connection : {
-                                host     : '127.0.0.1',
-                                port     : 3306,
-                                user     : 'root',
-                                password : 'hapi',
-                                database : 'user'
+                plugin: '@hapipal/schwifty',
+                options: {
+                    $filter: 'NODE_ENV',
+                    $default: {},
+                    $base: {
+                        migrateOnStart: true,
+                        knex: {
+                            client: 'mysql',
+                            connection: {
+                                host: '127.0.0.1',
+                                port: 3306,
+                                user: 'root',
+                                password: 'hapi',
+                                database: 'user'
                             }
                         }
-                },
-                production : {
-                        migrateOnStart : false
+                    },
+                    production: {
+                        migrateOnStart: false
                     }
                 }
             },
